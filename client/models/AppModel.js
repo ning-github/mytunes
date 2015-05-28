@@ -18,25 +18,33 @@ var AppModel = Backbone.Model.extend({
     }, this);
 
     params.library.on('enqueue', function(song){
-      // console.log(this.get('songQueue'));
-      if (this.get('songQueue').length === 0) {
-        this.set('currentSong', song);
-      }
+
       this.get('songQueue').add(song);
-      //if songQueue.length === 0
-      //set currentSong to song
-      // console.log(this.get('songQueue'));
+      if (this.get('songQueue').length === 1) {
+        this.get('songQueue').playFirst();
+      }
+
     }, this);
 
     params.library.on('dequeue', function(song){
-      // console.log(this.get('songQueue'));
-      this.get('songQueue').remove(song);
-      // console.log(this.get('songQueue'));
+
+      if (this.get('songQueue').models[0] === song){
+        this.get('songQueue').remove(song);
+        if (this.get('songQueue').length) {
+          this.get('songQueue').playFirst();
+        }
+      }
+      else {
+        this.get('songQueue').remove(song);
+      }
+
     }, this);
 
     params.library.on('ended', function(song){
       this.get('songQueue').remove(song);
-      this.get('songQueue').playFirst();
+      if (this.get('songQueue').length) {
+        this.get('songQueue').playFirst();
+      }
     }, this);
   }
 

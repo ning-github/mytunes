@@ -6,8 +6,10 @@ var SongQueue = Songs.extend({
   },
 
 
+
   playFirst: function(){
-    this.model[0].play();
+    // console.log(this);
+    this.models[0].play();
   }
 
 });
